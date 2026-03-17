@@ -3,150 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal do Associado</title>
+    <title>Portal ARM</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0b1f3a">
     <style>
-        /* SEU ESTILO IMPORTADO (DARK MODE) */
         *{box-sizing:border-box;}
-        :root{
-            --bg:#0b1f3a;
-            --card:#122b52;
-            --text:#ffffff;
-            --accent:#facc15;
-            --result:#1e3a8a;
-            --input-bg:#0b1f3a;
-            --success:#4ade80;
-        }
-
+        :root{ --bg:#0b1f3a; --card:#122b52; --text:#ffffff; --accent:#facc15; --result:#1e3a8a; --input-bg:#0b1f3a; --success:#4ade80; }
         body{ font-family:Arial,sans-serif; background:var(--bg); color:var(--text); margin:0; padding:20px; }
         .container{ max-width:850px; margin:auto; }
-        
-        h1{text-align:center; font-size:24px; color:var(--accent); margin-bottom:5px;}
-        h2{text-align:center; font-size:14px; opacity:0.8; margin-bottom:20px;}
+        .header-logo { display: block; margin: 0 auto 10px auto; max-width: 120px; height: auto; border-radius: 10px; }
+        h1{text-align:center; font-size:22px; color:var(--accent); margin-bottom:5px;}
+        h2{text-align:center; font-size:14px; opacity:0.8; margin-top:0; margin-bottom:15px;}
         h3{font-size:16px; color:var(--accent); margin-top:0; border-bottom:1px solid #ffffff22; padding-bottom:8px;}
-        
         .card{background:var(--card); padding:20px; border-radius:12px; margin-bottom:15px; box-shadow: 0 4px 12px rgba(0,0,0,0.4);}
-        
         input,select{ width:100%; padding:10px; margin:6px 0; border-radius:6px; border:1px solid #ffffff22; background:var(--input-bg); color:var(--text); font-size:14px;}
-        input:focus{ border-color: var(--accent); outline: none; }
-
         button{ border:none; border-radius:8px; font-weight:bold; cursor:pointer; transition: 0.2s; }
         .btn-main{ width:100%; padding:14px; margin-top:10px; background:var(--accent); color:black; font-size:16px;}
         .btn-save{ width:100%; padding:14px; margin-top:10px; background:var(--success); color:black; font-size:16px;}
         .btn-red{ background:#ef4444; color:white; padding:8px 15px; font-size:12px; }
         .btn-link{ background:none; color:var(--accent); text-decoration:underline; font-size:14px; margin-top:15px; display:block; text-align:center; width:100%; cursor:pointer;}
-
         .flex-grid { display: flex; gap: 20px; flex-wrap: wrap; }
         .col { flex: 1; min-width: 300px; }
-        
         .resultado-painel{ background:var(--result); padding:15px; border-radius:8px; font-size:14px; border: 1px solid #ffffff11; }
         .resultado-painel p { margin: 10px 0; border-bottom: 1px solid #ffffff11; padding-bottom: 5px; }
         .resultado-painel strong { color: var(--accent); display: inline-block; width: 110px; }
-
         .hidden { display: none; }
         label { font-size: 11px; color: var(--accent); font-weight: bold; text-transform: uppercase; margin-top: 10px; display: block; }
         #msg { text-align: center; margin-top: 15px; font-weight: bold; color: var(--accent); min-height: 20px; }
     </style>
 </head>
 <body>
-
 <div class="container">
-    <h1>Portal do Associado</h1>
-    <h2>Associação Regional de Modelismo - ARM</h2>
+    <img src="URL_DA_SUA_IMAGEM_AQUI" class="header-logo" alt="Logo ARM">
+    <h1>Associação Regional de Modelismo - ARM</h1>
+    <h2>Portal do Associado</h2>
 
     <div id="tela-login" class="card">
         <label>CPF</label>
         <input type="text" id="login-cpf" placeholder="000.000.000-00" oninput="mCPF(this)" maxlength="14">
-        <button class="btn-main" onclick="verificar()">ENTRAR NO PORTAL</button>
+        <button class="btn-main" onclick="verificar()">ENTRAR</button>
         <div class="btn-link" onclick="abrirCadastro()">Novo por aqui? Cadastre-se</div>
     </div>
 
     <div id="tela-token" class="card hidden">
         <h3>Verificação</h3>
-        <p style="font-size:14px; opacity:0.8">Um código foi enviado ao seu e-mail cadastrado.</p>
         <input type="text" id="token-input" placeholder="000000" maxlength="6">
         <button class="btn-main" onclick="validar()">VALIDAR CÓDIGO</button>
-        <div class="btn-link" onclick="location.reload()">Cancelar</div>
     </div>
 
     <div id="tela-dados" class="hidden">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-            <h3 style="border:none; margin:0">Minha Conta</h3>
             <button class="btn-red" onclick="location.reload()">SAIR</button>
         </div>
         <div class="flex-grid">
-            <div class="col card">
-                <h3>Dados Atuais</h3>
-                <div id="espelho" class="resultado-painel"></div>
-            </div>
+            <div class="col card"><h3>Dados Atuais</h3><div id="espelho" class="resultado-painel"></div></div>
             <div class="col card">
                 <h3>Atualizar Cadastro</h3>
-                <label>Nome Completo</label>
-                <input type="text" id="edit-nome">
-                <label>E-mail</label>
-                <input type="email" id="edit-email">
-                <label>WhatsApp</label>
-                <input type="text" id="edit-whats" oninput="mTel(this)" maxlength="15">
-                <label>Emergência (Nome - Tel)</label>
-                <input type="text" id="edit-emerg">
-                <label>Possui BRA?</label>
-                <select id="edit-bra-opcao"><option>Não</option><option>Sim</option></select>
-                <label>Nº BRA</label>
-                <input type="text" id="edit-bra">
-                <label>Vencimento BRA</label>
-                <input type="date" id="edit-venc">
+                <label>Nome</label><input type="text" id="edit-nome">
+                <label>E-mail</label><input type="email" id="edit-email">
+                <label>WhatsApp</label><input type="text" id="edit-whats" oninput="mTel(this)" maxlength="15">
+                <label>Emergência</label><input type="text" id="edit-emerg">
+                <label>BRA</label><select id="edit-bra-opcao"><option>Não</option><option>Sim</option></select>
+                <label>Nº BRA</label><input type="text" id="edit-bra">
+                <label>Vencimento BRA</label><input type="date" id="edit-venc">
                 <button class="btn-save" onclick="salvar('ATUALIZAR')">SALVAR ALTERAÇÕES</button>
             </div>
         </div>
     </div>
 
     <div id="tela-novo" class="card hidden">
-        <h3>Novo Cadastro</h3>
-        <label>Nome Completo</label>
-        <input type="text" id="n-nome">
-        <label>CPF</label>
-        <input type="text" id="n-cpf" oninput="mCPF(this)" maxlength="14">
-        <label>E-mail</label>
-        <input type="email" id="n-email">
-        <label>WhatsApp</label>
-        <input type="text" id="n-whats" oninput="mTel(this)" maxlength="15">
-        <label>Emergência</label>
-        <input type="text" id="n-emerg" placeholder="Nome - Tel">
-        <label>Possui BRA?</label>
-        <select id="n-bra-opcao"><option>Não</option><option>Sim</option></select>
-        <label>Nº BRA</label>
-        <input type="text" id="n-bra-num">
-        <label>Vencimento BRA</label>
-        <input type="date" id="n-bra-venc">
+        <h3>Ficha de Cadastro</h3>
+        <label>Nome</label><input type="text" id="n-nome">
+        <label>CPF</label><input type="text" id="n-cpf" oninput="mCPF(this)" maxlength="14">
+        <label>E-mail</label><input type="email" id="n-email">
+        <label>WhatsApp</label><input type="text" id="n-whats" oninput="mTel(this)" maxlength="15">
+        <label>Emergência</label><input type="text" id="n-emerg" placeholder="Nome - Tel">
         <button class="btn-save" onclick="salvar('CADASTRO')">FINALIZAR</button>
         <div class="btn-link" onclick="location.reload()">Voltar</div>
     </div>
-
     <div id="msg"></div>
 </div>
 
 <script>
-    // --- IMPORTANTE: COLOQUE SUA URL DO GOOGLE SCRIPT ABAIXO ---
     const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbwUMC5tWE039AkZmpY3gjYywpHyupRguGOdlm_s4iCLAm0falYEf6lA3mBVEhJXNP2y/exec";
 
-    const msg = (t) => document.getElementById('msg').innerText = t;
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
 
-    // Mascaras
+    const msg = (t) => document.getElementById('msg').innerText = t;
     function mCPF(i){ let v=i.value.replace(/\D/g,""); v=v.replace(/(\d{3})(\d)/,"$1.$2"); v=v.replace(/(\d{3})(\d)/,"$1.$2"); v=v.replace(/(\d{3})(\d{1,2})$/,"$1-$2"); i.value=v; }
     function mTel(i){ let v=i.value.replace(/\D/g,""); v=v.replace(/^(\d{2})(\d)/g,"($1) $2"); v=v.replace(/(\d)(\d{4})$/,"$1-$2"); i.value=v; }
 
-    // Comunicação com o Google (GET)
     async function apiGet(params) {
         const query = new URLSearchParams(params).toString();
         const res = await fetch(`${URL_SCRIPT}?${query}`);
         return await res.json();
     }
 
-    // Comunicação com o Google (POST)
     async function apiPost(corpo) {
-        const res = await fetch(URL_SCRIPT, {
-            method: "POST",
-            body: JSON.stringify(corpo)
-        });
+        const res = await fetch(URL_SCRIPT, { method: "POST", body: JSON.stringify(corpo) });
         return await res.json();
     }
 
@@ -154,16 +110,12 @@
         const cpf = document.getElementById('login-cpf').value;
         if(cpf.length < 14) return msg("⚠️ CPF Incompleto.");
         msg("🔍 Verificando...");
-        try {
-            const r = await apiGet({ acao: "verificar", cpf: cpf });
-            if(r.status === "EXISTE") {
-                document.getElementById('tela-login').classList.add('hidden');
-                document.getElementById('tela-token').classList.remove('hidden');
-                msg("✅ Código enviado!");
-            } else {
-                msg("❌ CPF não cadastrado.");
-            }
-        } catch(e) { msg("Erro de conexão."); }
+        const r = await apiGet({ acao: "verificar", cpf: cpf });
+        if(r.status === "EXISTE") {
+            document.getElementById('tela-login').classList.add('hidden');
+            document.getElementById('tela-token').classList.remove('hidden');
+            msg("✅ Código enviado!");
+        } else { msg("❌ CPF não cadastrado."); }
     }
 
     function abrirCadastro() {
@@ -176,27 +128,16 @@
         const cpf = document.getElementById('login-cpf').value;
         const token = document.getElementById('token-input').value;
         msg("⏳ Validando...");
-        try {
-            const d = await apiGet({ acao: "validar", cpf: cpf, token: token });
-            if(d.erro) throw new Error(d.erro);
-            document.getElementById('tela-token').classList.add('hidden');
-            document.getElementById('tela-dados').classList.remove('hidden');
-            atualizarEspelho(d);
-            msg("");
-        } catch(e) { msg("❌ " + e.message); }
+        const d = await apiGet({ acao: "validar", cpf: cpf, token: token });
+        if(d.erro) { msg("❌ " + d.erro); return; }
+        document.getElementById('tela-token').classList.add('hidden');
+        document.getElementById('tela-dados').classList.remove('hidden');
+        atualizarEspelho(d);
+        msg("");
     }
 
     function atualizarEspelho(d) {
-        document.getElementById('espelho').innerHTML = `
-            <p><strong>Nome:</strong> ${d.nome}</p>
-            <p><strong>CPF:</strong> ${d.cpf}</p>
-            <p><strong>E-mail:</strong> ${d.email}</p>
-            <p><strong>WhatsApp:</strong> ${d.whatsapp}</p>
-            <p><strong>Emergência:</strong> ${d.emergencia}</p>
-            <p><strong>Possui BRA:</strong> ${d.bra}</p>
-            <p><strong>Nº BRA:</strong> ${d.numeroBra || '-'}</p>
-            <p><strong>Vencimento:</strong> ${d.vencimentoBra || '-'}</p>
-        `;
+        document.getElementById('espelho').innerHTML = `<p><strong>Nome:</strong> ${d.nome}</p><p><strong>CPF:</strong> ${d.cpf}</p><p><strong>E-mail:</strong> ${d.email}</p><p><strong>WhatsApp:</strong> ${d.whatsapp}</p><p><strong>Emergência:</strong> ${d.emergencia}</p><p><strong>BRA:</strong> ${d.bra}</p><p><strong>Nº BRA:</strong> ${d.numeroBra || '-'}</p><p><strong>Vencimento:</strong> ${d.vencimentoBra || '-'}</p>`;
     }
 
     async function salvar(tipo) {
@@ -206,9 +147,7 @@
             email: document.getElementById('n-email').value,
             whatsapp: document.getElementById('n-whats').value,
             emergencia: document.getElementById('n-emerg').value,
-            bra: document.getElementById('n-bra-opcao').value,
-            numeroBra: document.getElementById('n-bra-num').value,
-            vencimentoBra: document.getElementById('n-bra-venc').value
+            bra: "Não", numeroBra: "", vencimentoBra: ""
         } : {
             cpf: document.getElementById('login-cpf').value,
             nome: document.getElementById('edit-nome').value,
@@ -219,17 +158,11 @@
             numeroBra: document.getElementById('edit-bra').value,
             vencimentoBra: document.getElementById('edit-venc').value
         };
-
         msg("💾 Salvando...");
-        try {
-            const r = await apiPost({ tipo: tipo, dados: dados });
-            msg("✅ " + r.msg);
-            if(r.reload) setTimeout(() => location.reload(), 2500);
-            if(r.novoDados) {
-                atualizarEspelho(r.novoDados);
-                document.querySelectorAll('#tela-dados input').forEach(i => i.value = "");
-            }
-        } catch(e) { msg("Erro ao salvar."); }
+        const r = await apiPost({ tipo: tipo, dados: dados });
+        msg("✅ " + r.msg);
+        if(r.reload) setTimeout(() => location.reload(), 2500);
+        if(r.novoDados) { atualizarEspelho(r.novoDados); document.querySelectorAll('#tela-dados input').forEach(i => i.value = ""); }
     }
 </script>
 </body>
